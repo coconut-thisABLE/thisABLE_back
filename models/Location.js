@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const autoIncrement = require('mongoose-auto-increment');
-const {base} = require('../config/vars');
+const httpStatus = require('http-status');
+const APIError = require('../errors/api-error');
 
 autoIncrement.initialize(mongoose.connection);
 
@@ -57,6 +58,16 @@ const locationSchema = new mongoose.Schema(
 );
 
 locationSchema.statics = {
+  async get(id) {
+    const loc = await this.findById(id).exec();
+    if (loc) {
+      return loc;
+    }
+    throw new APIError({
+      message: 'Location does not exist',
+      status: httpStatus.NOT_FOUND,
+    });
+  },
   list({page, perPage}) {
     return this.find()
         .sort({_id: 1})

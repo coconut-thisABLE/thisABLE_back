@@ -21,3 +21,15 @@ exports.list = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.get = async (req, res, next) => {
+  try {
+    const location = await Location.get(req.params.locationId);
+    return res.status(httpStatus.OK).json({
+      'message': 'Retrieve Location By Id Success',
+      'response': location,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
