@@ -2,10 +2,10 @@ const httpStatus = require('http-status');
 const {Location} = require('../models');
 const {paginate} = require('../util/pagination');
 
+const DEFAULT_PAGE_SIZE = 10;
 
 exports.list = async (req, res, next) => {
   try {
-    const DEFAULT_PAGE_SIZE = 10;
     req.query.perPage = DEFAULT_PAGE_SIZE;
     const locations = await Location.list(req.query);
 
