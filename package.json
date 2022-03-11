@@ -21,10 +21,10 @@
     "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.21",
-    "mongoose": "^6.2.4",
+    "mongoose": "^6.2.5",
     "mongoose-auto-increment": "^5.0.1",
     "morgan": "^1.10.0",
-    "npm": "^8.5.3",
+    "npm": "^8.5.4",
     "swagger-jsdoc": "^6.1.0",
     "swagger-ui-express": "^4.3.0",
     "winston": "^3.6.0"
