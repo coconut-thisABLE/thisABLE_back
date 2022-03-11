@@ -107,5 +107,4 @@ dist
 # Project configuration
 config/
 
-# Google Cloud Service Ley
-apt-*.json
+.DS_Store

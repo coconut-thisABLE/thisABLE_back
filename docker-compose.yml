@@ -1,0 +1,18 @@
+version: '2.4'
+
+services:
+  app:
+    build: .
+    environment:
+      - NODE_ENV=test
+      - MONGO_URI=mongodb://mongodb:27017/thisable-test
+    volumes:
+      - .:/app
+    ports:
+      - "3000:80"
+    depends_on:
+      - mongodb
+  mongodb:
+      image: mongo
+      ports:
+        - '27017:27017'
