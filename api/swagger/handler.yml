@@ -1,0 +1,17 @@
+components:
+  schemas:
+    Pagination:
+      type: object
+      properties:
+        totalPage:
+          type: intger
+          description: total page number
+          example: 3
+        currentPage:
+          type: integer
+          description: current page number
+          example: 1
+        nextUrl:
+          type: string
+          description: next page url
+          example: '?page=2'

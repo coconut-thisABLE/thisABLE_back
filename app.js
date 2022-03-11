@@ -25,6 +25,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 
+const {swaggerUi, specs} = require('./modules/swagger');
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, {explorer: true}));
 app.use('/', indexRouter);
 
 // catch 404 and forward to error handler

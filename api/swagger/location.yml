@@ -1,0 +1,80 @@
+components:
+  schemas:
+    Location:
+      {
+        type: object,
+        properties: {
+          _id: {
+            type: integer,
+            description: unique id of the location,
+            example: 1
+          },
+          name: {
+            type: string,
+            description: name of the location,
+            example: 국립중앙박물관
+          },
+          address: {
+            type: string,
+            description: address of the location,
+            example: 137 Seobinggo-ro, Yongsan-gu, 서울특별시 South Korea
+          },
+          locationType: {
+            type: string,
+            description: type of the location,
+            example: 'subway'
+          },
+          latitude: {
+            type: number,
+            format: float,
+            description: latitude of the location,
+            example: 37.5238506
+          },
+          longitude: {
+            type: number,
+            format: float,
+            description: longitude of the location,
+            example: 126.9804702
+          },
+          isToiletExists: {
+            type: boolean,
+            description: Whether there is a toilet for the disabled,
+            example: false,
+          },
+          isChargerExists: {
+            type: boolean,
+            description: Whether there is a electronic wheelchair charger,
+            example: false,
+          },
+          isElevatorExists: {
+            type: boolean,
+            description: Whether there is a elevator for the disabled,
+            example: false,
+          },
+          isSlopeExists: {
+            type: boolean,
+            description: Whether there is a slope for the disabled,
+            example: false,
+          },
+          googlePlaceId: {
+            type: string,
+            description: google maps place id of the location,
+            example: ChIJN2x0fu2ifDUR51BupseGYmE
+          }
+        }
+      }
+    LocationList:
+      allOf: [
+        $ref: '#/components/schemas/Pagination',
+        {
+          type: object,
+          properties: {
+            results: {
+              type: array,
+              items: {
+                $ref: '#/components/schemas/Location',
+              }
+            }
+          }
+        }
+      ]
