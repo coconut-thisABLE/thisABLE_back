@@ -28,7 +28,8 @@ const controller = require('../../controllers/location');
  *               $ref: '#/components/schemas/LocationList'
  */
 router.route('')
-    .get(controller.list);
+    .get(controller.list)
+    .post(controller.create);
 
 /**
  * @swagger

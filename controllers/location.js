@@ -33,3 +33,15 @@ exports.get = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.create = async (req, res, next) => {
+  try {
+    const loc = new Location(req.body);
+    await loc.save();
+    res.status(httpStatus.CREATED).json({
+      'message': 'success',
+    });
+  } catch (e) {
+    next(e);
+  }
+};
