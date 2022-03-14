@@ -124,7 +124,9 @@ router.route('/:locationId/toilet')
  *                  type: string
  *                  example: get charger info success
  *                data:
- *                  $ref: '#/components/schemas/Charger'
+ *                  type: array
+ *                  items:
+ *                    $ref: '#/components/schemas/Charger'
  */
 router.route('/:locationId/charger')
     .get(controller.getChargerById);
