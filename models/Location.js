@@ -75,6 +75,13 @@ locationSchema.statics = {
         .limit(perPage)
         .exec();
   },
+  searchList(query, {page, perPage}) {
+    return this.find(query)
+        .sort({_id: 1})
+        .skip(perPage * (page - 1))
+        .limit(perPage)
+        .exec();
+  },
   getSize() {
     return this.count();
   },

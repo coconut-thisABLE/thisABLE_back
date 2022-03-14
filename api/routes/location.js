@@ -31,6 +31,10 @@ router.route('')
     .get(controller.list)
     .post(controller.create);
 
+
+router.route('/search')
+    .get(controller.search);
+
 /**
  * @swagger
  * paths:
