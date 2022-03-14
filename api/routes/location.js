@@ -97,4 +97,36 @@ router.route('/search')
 router.route('/:locationId')
     .get(controller.get);
 
+router.route('/:locationId/toilet')
+    .get(controller.getToiletById);
+
+
+/**
+ * @swagger
+ * paths:
+ *  /{location_ID}/charger:
+ *   get:
+ *    tags:
+ *    - Maps
+ *    summary: charger detail
+ *    description: get charger detail info by location Id
+ *    produces:
+ *      - application/json
+ *    responses:
+ *      200:
+ *        description: OK
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                message:
+ *                  type: string
+ *                  example: get charger info success
+ *                data:
+ *                  $ref: '#/components/schemas/Charger'
+ */
+router.route('/:locationId/charger')
+    .get(controller.getChargerById);
+
 module.exports = router;
