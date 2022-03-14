@@ -31,6 +31,44 @@ router.route('')
     .get(controller.list)
     .post(controller.create);
 
+
+/**
+ *  @swagger
+ *  paths:
+ *   /search:
+ *    get:
+ *     tags:
+ *     - Maps
+ *     summary: location search list
+ *     description: location list filtered by utility
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         required: true
+ *         schema:
+ *           type: integer
+ *           description: requested page number
+ *       - in: query
+ *         name: query
+ *         required: true
+ *         schema:
+ *           type: string
+ *           description: name of utility
+ *           enum: ['toilet', 'charger', 'slope', 'elevator']
+ *           example: toliet
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/LocationList'
+ */
+router.route('/search')
+    .get(controller.search);
+
 /**
  * @swagger
  * paths:

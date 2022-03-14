@@ -45,3 +45,51 @@ exports.create = async (req, res, next) => {
     next(e);
   }
 };
+
+/**
+ * @private
+ * @param {string} query
+ * @return {object} condtion
+ */
+function getQueryFilterCondition(query) {
+  const FILTER_CONDITION_DICTIONARY = {
+    toilet: {isToiletExists: true},
+    charger: {isChargerExists: true},
+    elevator: {isElevatorExists: true},
+    slope: {isSlopeExists: true},
+  };
+  return FILTER_CONDITION_DICTIONARY[query];
+}
+
+/**
+ * @private
+ * @param {string} query
+ * @return {Array} filteredLocations
+ */
+async function search({query, page}) {
+  const filteredCondition = getQueryFilterCondition(query);
+  const data = await Location.searchList(
+      filteredCondition,
+      {
+        page: page,
+        perPage: DEFAULT_PAGE_SIZE,
+      },
+  );
+  const count = await Location.count(filteredCondition).exec();
+  return {data, count};
+}
+
+exports.search = async (req, res, next) => {
+  try {
+    const searchResultData = await search(req.query);
+    const result = paginate({
+      sizeOfModel: searchResultData.count,
+      sizePerPage: DEFAULT_PAGE_SIZE,
+      currentPageNumber: req.query.page,
+      results: searchResultData.data,
+    });
+    return res.status(httpStatus.OK).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
