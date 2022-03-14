@@ -78,3 +78,72 @@ components:
           }
         }
       ]
+    Charger:
+      type: object
+      properties:
+        locationId:
+          type: integer
+          description: id of location
+          example: 12
+        airinjectoryn:
+          type: string
+          description: 공기주입가능여부
+          example: 'Y'
+          enum: ['Y', 'N']
+        moblphonchrstnyn:
+          type: string
+          description: 휴대전화충전가능여부
+          example: 'Y'
+          enum: ['Y', 'N']
+        smtmuseco:
+          type: string
+          description: 동시사용가능대수
+          example: '2'
+        weekdayoperopenhhmm:
+          type: string
+          description: 평일운영시작시각
+          example: '09:00'
+        weekdayopercolsehhmm:
+          type: string
+          description: 평일운영종료시각
+          example: '18:00'
+        satoperoperopenhhmm:
+          type: string
+          description: 토요일운영시작시각
+          example: 00:00
+        satoperclosehhmm:
+          type: string
+          description: 토요일운영종료시각
+          example: 00:00
+        holidayoperopenhhmm:
+          type: string
+          description: 공휴일운영시작시각 
+          example: 00:00
+        holidaycloseopenhhmm:
+          type: string
+          description: 공휴일운영종료시각
+          example: 00:00
+        fcltynm:
+          type: string
+          description: 시설명
+          example: 용산행복장애인자립생활센터
+        institutionnm:
+          type: string
+          description: 관리기관명
+          example: 용산행복장애인자립생활센터
+        institutionphonenumber:
+          type: string
+          description: 관리기관전화번호
+          example: '02-704-0420'
+        instllcdesc:
+          type: string
+          description: 설치장소설명
+          example: '센터 1층'
+        work_dttm:
+          type: string
+          description: 작업일시
+          example: 1646631453000
+        referencedate:
+          type: string
+          description: 데이터기준일자
+          example: '2021-09-15'

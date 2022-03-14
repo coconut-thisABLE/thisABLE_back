@@ -1,5 +1,5 @@
 const httpStatus = require('http-status');
-const {Location, Toilet} = require('../models');
+const {Location, Toilet, Charger} = require('../models');
 const {paginate} = require('../util/pagination');
 
 const DEFAULT_PAGE_SIZE = 10;
@@ -100,6 +100,18 @@ exports.getToiletById = async (req, res, next) => {
     return res.status(httpStatus.OK).json({
       'message': 'get toilet info success',
       'data': toilet,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getChargerById = async (req, res, next) => {
+  try {
+    const charger = await Charger.get(req.params.locationId);
+    return res.status(httpStatus.OK).json({
+      'message': 'get charger info success',
+      'data': charger,
     });
   } catch (error) {
     next(error);
