@@ -97,4 +97,7 @@ router.route('/search')
 router.route('/:locationId')
     .get(controller.get);
 
+router.route('/:locationId/toilet')
+    .get(controller.getToiletById);
+
 module.exports = router;
