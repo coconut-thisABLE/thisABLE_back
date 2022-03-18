@@ -3,10 +3,6 @@ const APIError = require('../errors/api-error');
 
 const reviewSchema = new mongoose.Schema(
     {
-      _id: {
-        type: Number,
-        unique: true,
-      },
       locationId: {
         type: Number,
         ref: 'Location',
@@ -23,7 +19,7 @@ const reviewSchema = new mongoose.Schema(
         default: 'anonymous',
       },
       detail: {
-        type: Text,
+        type: String,
         required: true,
       },
       star_rate: {
