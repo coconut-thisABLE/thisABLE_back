@@ -9,6 +9,14 @@ const {env} = require('../config/vars');
 
 autoIncrement.initialize(mongoose.connection);
 
+/**
+ * User Roles
+ */
+const roles = ['user', 'admin'];
+
+/**
+ * User Schema
+ */
 const userSchema = new mongoose.Schema(
     {
       _id: {
@@ -26,11 +34,13 @@ const userSchema = new mongoose.Schema(
       role: {
         type: String,
         required: true,
+        enum: roles,
         default: 'user',
       },
       type: {
         type: String,
         required: true,
+        enum: ['abled', 'disabled'],
         default: 'disabled',
       },
     },
