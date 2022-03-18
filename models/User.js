@@ -19,6 +19,7 @@ const userSchema = new mongoose.Schema(
     {
       email: {
         type: String,
+        unique: true,
         required: true,
       },
       password: {
@@ -109,7 +110,7 @@ userSchema.statics = {
    * @return {Error|APIError}
    */
   checkDuplicateEmail(error) {
-    if (error.name === 'MongoError' && error.code === 11000) {
+    if (error.code === 11000) {
       return new APIError({
         message: 'Validation Error',
         errors: [{

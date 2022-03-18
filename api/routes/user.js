@@ -40,11 +40,39 @@ const controller = require('../../controllers/user');
   *           content:
   *             application/json:
   *               type: object
-  *               properties:
-  *                 message:
-  *                   type: string
-  *                   example: 'User Registered Success. Welcome to thisABLE!'
-*/
+  *               schema:
+  *                 properties:
+  *                   message:
+  *                     type: string
+  *                     example: 'User Registered Success. Welcome to thisABLE!'
+  *         400:
+  *           description: Duplicate Email
+  *           content:
+  *             application/json:
+  *               schema:
+  *                 type: object
+  *                 properties:
+  *                   code:
+  *                     type: integer
+  *                     example: 400
+  *                   message:
+  *                       type: string
+  *                       example: 'Validation Error'
+  *                   errors:
+  *                     type: array
+  *                     items:
+  *                       type: object
+  *                       properties:
+  *                         field:
+  *                           type: string
+  *                           example: email
+  *                         location:
+  *                           type: string
+  *                           example: body
+  *                         messages:
+  *                           type: array
+  *                           example: ["\"email\" already exists"]
+  */
 router.route('/signup')
     .post(controller.signup);
 
