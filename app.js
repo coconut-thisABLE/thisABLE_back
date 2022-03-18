@@ -35,14 +35,13 @@ app.use(function(req, res, next) {
 });
 
 // error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+// if error is not an instanceOf APIError, convert it.
+app.use(error.converter);
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
+// catch 404 and forward to error handler
+app.use(error.notFound);
+
+// error handler, send stacktrace only during development
+app.use(error.handler);
 
 module.exports = app;
