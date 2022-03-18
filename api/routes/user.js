@@ -8,7 +8,7 @@ const controller = require('../../controllers/user');
   *     post:
   *       tags:
   *       - Auth
-  *       summary: 회원가입
+  *       summary: signup
   *       requestBody:
   *         required: true
   *         content:
@@ -55,7 +55,7 @@ router.route('/signup')
   *      post:
   *        tags:
   *        - Auth
-  *        summary: 로그인
+  *        summary: login
   *        requestBody:
   *          required: true
   *          content:
