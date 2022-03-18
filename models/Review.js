@@ -22,7 +22,7 @@ const reviewSchema = new mongoose.Schema(
         type: String,
         required: true,
       },
-      star_rate: {
+      star: {
         type: Number,
         required: true,
         min: 0.0,

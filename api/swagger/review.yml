@@ -30,7 +30,7 @@ components:
           type: string
           description: detail content of review
           example: "매장이 넓고 경사로가 있어서 이용하기 편리했어요 카페 내부도 예뻐요! 입구는 하나라 경사로 찾기 쉬울 것 같아요"
-        star_rate: 
+        star: 
           type: number
           description: star rate given by review wrtier
           example: 4.5
