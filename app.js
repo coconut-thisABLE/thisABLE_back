@@ -6,7 +6,9 @@ const logger = require('morgan');
 const cors = require('cors');
 const mongoose = require('./config/mongoose');
 const indexRouter = require('./api/index');
-
+const error = require('./api/middlewares/errors');
+const passport = require('passport');
+const strategies = require('./modules/passport');
 
 require('dotenv').config();
 mongoose.connect();
@@ -34,15 +36,18 @@ app.use(function(req, res, next) {
   next(createError(404));
 });
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+// passport
+app.use(passport.initialize());
+passport.use('jwt', strategies.jwt);
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
+// error handler
+// if error is not an instanceOf APIError, convert it.
+app.use(error.converter);
+
+// catch 404 and forward to error handler
+app.use(error.notFound);
+
+// error handler, send stacktrace only during development
+app.use(error.handler);
 
 module.exports = app;

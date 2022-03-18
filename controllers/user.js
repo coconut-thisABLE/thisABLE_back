@@ -1,7 +1,26 @@
 const httpStatus = require('http-status');
+const moment = require('moment-timezone');
 const {omit} = require('lodash');
-const {User} = require('../models');
+const {User, RefreshToken} = require('../models');
+const {jwtExpirationInterval} = require('../config/vars');
 
+/**
+ * Returns a formated object with tokens
+ * @param {Object} user
+ * @param {String} accessToken
+ * @return {Object}
+ */
+function generateTokenResponse(user, accessToken) {
+  const tokenType = 'JWT';
+  const refreshToken = RefreshToken.generate(user).token;
+  const expiresIn = moment().add(jwtExpirationInterval, 'minutes');
+  return {
+    tokenType,
+    accessToken,
+    refreshToken,
+    expiresIn,
+  };
+}
 
 exports.signup = async (req, res, next) => {
   try {
@@ -21,7 +40,7 @@ exports.login = async (req, res, next) => {
     const {user, accessToken} = await User.findAndGenerateToken(req.body);
     const token = generateTokenResponse(user, accessToken);
     const userTransformed = user.transform();
-    return res.json({token, user: userTransformed});
+    return res.status(httpStatus.CREATED).json({token, user: userTransformed});
   } catch (error) {
     return next(error);
   }

@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const controller = require('../../controllers/location');
+const reviewController = require('../../controllers/review');
 
 /**
  *  @swagger
@@ -130,5 +131,35 @@ router.route('/:locationId/toilet')
  */
 router.route('/:locationId/charger')
     .get(controller.getChargerById);
+
+/**
+ * @swagger
+ * paths:
+ *  /{location_ID}/review:
+ *   get:
+ *    tags:
+ *    - Maps
+ *    summary: review list of the location
+ *    description: get review list of the location
+ *    produces:
+ *      - application/json
+ *    responses:
+ *      200:
+ *        description: OK
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                message:
+ *                  type: string
+ *                  example: List Review of location number 1 Success
+ *                data:
+ *                  type: array
+ *                  items:
+ *                    $ref: '#/components/schemas/Review'
+ */
+router.route('/:locationId/review')
+    .get(reviewController.listByLocation);
 
 module.exports = router;

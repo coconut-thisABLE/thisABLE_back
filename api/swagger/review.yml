@@ -1,0 +1,40 @@
+components:
+  schemas:
+    Review:
+      properties:
+        _id:
+          type: string
+          description: unique id of the review,
+          example: 62343510c3dd5a345c6431d4
+        locationId:
+          type: number
+          description: reviewed location unique id
+          example: 1
+        userId:
+          type: string,
+          description: user unique id of writer
+          example: null
+        userType: 
+          type: string,
+          description: user type of writer
+          example: anonymous
+        good:
+          type: number
+          description: the number of good rate received from other users
+          example: 0
+        bad:
+          type: number
+          description: the number of bad rate received from other users
+          example: 0
+        detail:
+          type: string
+          description: detail content of review
+          example: "매장이 넓고 경사로가 있어서 이용하기 편리했어요 카페 내부도 예뻐요! 입구는 하나라 경사로 찾기 쉬울 것 같아요"
+        star: 
+          type: number
+          description: star rate given by review wrtier
+          example: 4.5
+        createdAt:
+          type: string
+          format: date
+          example: "2022-03-18T09:40:53.077Z"
