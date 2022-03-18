@@ -6,7 +6,9 @@ const logger = require('morgan');
 const cors = require('cors');
 const mongoose = require('./config/mongoose');
 const indexRouter = require('./api/index');
-
+const error = require('./api/middlewares/errors');
+const passport = require('passport');
+const strategies = require('./modules/passport');
 
 require('dotenv').config();
 mongoose.connect();
@@ -33,6 +35,10 @@ app.use('/', indexRouter);
 app.use(function(req, res, next) {
   next(createError(404));
 });
+
+// passport
+app.use(passport.initialize());
+passport.use('jwt', strategies.jwt);
 
 // error handler
 // if error is not an instanceOf APIError, convert it.
