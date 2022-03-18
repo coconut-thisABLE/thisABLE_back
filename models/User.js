@@ -1,13 +1,11 @@
 const mongoose = require('mongoose');
-const autoIncrement = require('mongoose-auto-increment');
 const httpStatus = require('http-status');
 const bcrypt = require('bcryptjs');
-const jwt = require('../modules/jwt');
+const moment = require('moment-timezone');
+const jwt = require('jwt-simple');
 const APIError = require('../errors/api-error');
-const {env} = require('../config/vars');
+const {env, jwtSecret, jwtExpirationInterval} = require('../config/vars');
 
-
-autoIncrement.initialize(mongoose.connection);
 
 /**
  * User Roles
@@ -19,10 +17,6 @@ const roles = ['user', 'admin'];
  */
 const userSchema = new mongoose.Schema(
     {
-      _id: {
-        type: Number,
-        unique: true,
-      },
       email: {
         type: String,
         required: true,
@@ -90,15 +84,17 @@ userSchema.statics = {
       isPublic: true,
     };
     if (password) {
-      if (user && await user.passwordMatches(password)) {
-        return {user, accessToken: user.token()};
+      if (user && await user.comparePassword(password)) {
+        const token = await user.token();
+        return {user, accessToken: token};
       }
       err.message = 'Incorrect email or password';
     } else if (refreshObject && refreshObject.userEmail === email) {
       if (moment(refreshObject.expires).isBefore()) {
         err.message = 'Invalid refresh token.';
       } else {
-        return {user, accessToken: user.token()};
+        const token = await user.token();
+        return {user, accessToken: token};
       }
     } else {
       err.message = 'Incorrect email or refreshToken';
@@ -130,21 +126,27 @@ userSchema.statics = {
   },
 };
 
-userSchema.plugin(autoIncrement.plugin, {
-  model: 'User',
-  field: '_id',
-  startAt: 1,
-  increment: 1,
-});
-
 /**
  * Method
  */
 userSchema.method({
+  transform() {
+    const transformed = {};
+    const fields = ['_id', 'email', 'type', 'createdAt'];
 
+    fields.forEach((field) => {
+      transformed[field] = this[field];
+    });
+
+    return transformed;
+  },
   async token() {
-    const {token} = await jwt.sign(this);
-    return token;
+    const payload = {
+      exp: moment().add(jwtExpirationInterval, 'minutes').unix(),
+      iat: moment().unix(),
+      sub: this._id,
+    };
+    return jwt.encode(payload, jwtSecret);
   },
   async comparePassword(password) {
     return bcrypt.compare(password, this.password);

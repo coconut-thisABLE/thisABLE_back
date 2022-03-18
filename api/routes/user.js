@@ -6,6 +6,6 @@ router.route('/signup')
     .post(controller.signup);
 
 router.route('/login')
-    .post();
+    .post(controller.login);
 
 module.exports = router;

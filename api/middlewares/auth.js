@@ -6,7 +6,7 @@ const APIError = require('../../errors/api-error');
 
 const ADMIN = 'admin';
 const LOGGED_USER = '_loggedUser';
-const ANONYMOUS = null;
+const ANONYMOUS = 'anonymous';
 
 const handleJWT = (req, res, next, roles) => async (err, user, info) => {
   const error = err || info;
@@ -29,15 +29,7 @@ const handleJWT = (req, res, next, roles) => async (err, user, info) => {
     return next(apiError);
   }
 
-  if (!roles.includes(user.role)) {
-    apiError.status = httpStatus.FORBIDDEN;
-    apiError.message = 'Forbidden';
-    return next(apiError);
-  } else if (err || !user) {
-    return next(apiError);
-  }
-
-  req.user = user;
+  req.user = user.transform();
   return next();
 };
 
