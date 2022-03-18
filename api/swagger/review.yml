@@ -34,3 +34,7 @@ components:
           type: number
           description: star rate given by review wrtier
           example: 4.5
+        createdAt:
+          type: string
+          format: date
+          example: "2022-03-18T09:40:53.077Z"
