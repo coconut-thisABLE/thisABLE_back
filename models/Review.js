@@ -9,7 +9,7 @@ const reviewSchema = new mongoose.Schema(
         required: true,
       },
       userId: {
-        type: Number,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: false,
       },
@@ -46,7 +46,7 @@ const reviewSchema = new mongoose.Schema(
 
 reviewSchema.pre('save', async function save(next) {
   try {
-    if (this.user == null) return next();
+    if (user == null) return next();
     this.userType = user.type;
     return next();
   } catch (e) {
