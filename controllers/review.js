@@ -13,3 +13,15 @@ exports.listByLocation = async (req, res, next) => {
     next(e);
   }
 };
+
+exports.create = async (req, res, next) => {
+  try {
+    req.body.userId = req.user ? req.uesr._id : null;
+    await new Review(req.body).save();
+    return res.status(httpStatus.CREATED).json({
+      message: 'Create new review Success',
+    });
+  } catch (e) {
+    next(e);
+  }
+};
