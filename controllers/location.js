@@ -9,14 +9,14 @@ exports.list = async (req, res, next) => {
     req.query.perPage = DEFAULT_PAGE_SIZE;
     const locations = await Location.list(req.query);
 
-    const sizeOfAllLocations = await Location.getSize();
+    const sizeOfAllLocations = Object.keys(locations).length;
     const result = paginate({
       sizeOfModel: sizeOfAllLocations,
       sizePerPage: DEFAULT_PAGE_SIZE,
       currentPageNumber: req.query.page,
       results: locations,
     });
-    res.status(httpStatus.OK).json(result);
+    return res.status(httpStatus.OK).json(result);
   } catch (error) {
     next(error);
   }
@@ -66,13 +66,17 @@ function getQueryFilterCondition(query) {
  * @param {string} query
  * @return {Array} filteredLocations
  */
-async function search({query, page}) {
+async function search({query, page, latitude, longitude}) {
   const filteredCondition = getQueryFilterCondition(query);
   const data = await Location.searchList(
       filteredCondition,
       {
         page: page,
         perPage: DEFAULT_PAGE_SIZE,
+      },
+      {
+        latitude,
+        longitude,
       },
   );
   const count = await Location.count(filteredCondition).exec();

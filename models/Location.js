@@ -31,6 +31,17 @@ const locationSchema = new mongoose.Schema(
         type: Number,
         required: true,
       },
+      position: {
+        type: {
+          type: String,
+          enum: ['Point'],
+          required: true,
+        },
+        coordinates: {
+          type: [Number],
+          required: true,
+        },
+      },
       isToiletExists: {
         type: Boolean,
         required: true,
@@ -57,6 +68,23 @@ const locationSchema = new mongoose.Schema(
     },
 );
 
+/**
+ * 
+ */
+const SORTING_BY_DISTACNE_CONDITION = (latitude, longitude) => {
+  return {
+    position: {
+      $nearSphere: {
+        $geometry: {
+          type: 'Point',
+          coordinates: [longitude, latitude],
+        },
+        $maxDistance: 2000,
+      },
+    },
+  }
+}
+
 locationSchema.statics = {
   async get(id) {
     const loc = await this.findById(id).exec();
@@ -68,15 +96,17 @@ locationSchema.statics = {
       status: httpStatus.NOT_FOUND,
     });
   },
-  list({page, perPage}) {
-    return this.find()
-        .sort({_id: 1})
+  list({page, perPage, latitude, longitude}) {
+    return this.find(SORTING_BY_DISTACNE_CONDITION(latitude, longitude))
         .skip(perPage * (page - 1))
         .limit(perPage)
         .exec();
   },
-  searchList(query, {page, perPage}) {
-    return this.find(query)
+  searchList(query, {page, perPage}, {latitude, longitude}) {
+    return this.find({
+      ...SORTING_BY_DISTACNE_CONDITION(latitude, longitude),
+      ...query
+    })
         .sort({_id: 1})
         .skip(perPage * (page - 1))
         .limit(perPage)

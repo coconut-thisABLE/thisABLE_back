@@ -20,6 +20,22 @@ const reviewController = require('../../controllers/review');
  *         schema:
  *           type: integer
  *           description: requested page number
+ *       - in: query
+ *         name: latitude
+ *         required: true
+ *         schema:
+ *           type: number
+ *           format: float
+ *           example: 37.5366059
+ *           description: latitude of current location
+ *       - in: query
+ *         name: longitude
+ *         required: true
+ *         schema:
+ *           type: number
+ *           format: float
+ *           example: 126.9771397
+ *           description: longitude of current location
  *     responses:
  *       200:
  *         description: OK
@@ -59,6 +75,22 @@ router.route('')
  *           description: name of utility
  *           enum: ['toilet', 'charger', 'slope', 'elevator']
  *           example: toliet
+ *       - in: query
+ *         name: latitude
+ *         required: true
+ *         schema:
+ *           type: number
+ *           format: float
+ *           example: 37.5366059
+ *           description: latitude of current location
+ *       - in: query
+ *         name: longitude
+ *         required: true
+ *         schema:
+ *           type: number
+ *           format: float
+ *           example: 126.9771397
+ *           description: longitude of current location
  *     responses:
  *       200:
  *         description: OK
