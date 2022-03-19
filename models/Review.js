@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const httpStatus = require('http-status');
 const APIError = require('../errors/api-error');
 
 const reviewSchema = new mongoose.Schema(
@@ -58,6 +59,21 @@ reviewSchema.pre('save', async function save(next) {
  * statics
  */
 reviewSchema.statics = {
+  async get(id) {
+    let review;
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      review = await this.findById(id).exec();
+    }
+    if (review) {
+      return review;
+    }
+
+    throw new APIError({
+      message: 'Not found',
+      status: httpStatus.NOT_FOUND,
+      isPublic: true,
+    });
+  },
   async findListByLocationId(locationId) {
     return this.find({locationId: locationId}).exec();
   },

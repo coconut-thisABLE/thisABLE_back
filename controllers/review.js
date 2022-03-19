@@ -28,7 +28,7 @@ exports.create = async (req, res, next) => {
 
 exports.recommend = async (req, res, next) => {
   try {
-    const review = await Review.findById(req.body.reviewId).exec();
+    const review = await Review.get(req.body.reviewId);
     await review.updateOne({
       good: review.good+1,
     }).exec();
@@ -41,7 +41,7 @@ exports.recommend = async (req, res, next) => {
 
 exports.discourage = async (req, res, next) => {
   try {
-    const review = await Review.findById(req.body.reviewId).exec();
+    const review = await Review.get(req.body.reviewId);
     await review.updateOne({
       bad: review.bad+1,
     }).exec();
