@@ -58,10 +58,73 @@ const {required} = require('joi');
 router.route('')
     .post(authorize(ANONYMOUS), controller.create);
 
-
+/**
+  * @swagger
+  * paths:
+  *   /review/recommend:
+  *     post:
+  *       tags:
+  *       - Review
+  *       summary: recommend the review
+  *       requestBody:
+  *         required: true
+  *         content:
+  *           application/json:
+  *             schema:
+  *               type: object
+  *               properties:
+  *                 reviewId:
+  *                   type: string
+  *                   description: unique id of review
+  *                   required: true
+  *                   example: 6234df9444b537fddcca769d
+  *       responses:
+  *         201:
+  *           description: Created
+  *           content:
+  *             application/json:
+  *               schema:
+  *                 type: object
+  *                 properties:
+  *                   message:
+  *                     type: string
+  *                     example: 'success'
+  */
 router.route('/recommend')
     .post(authorize(ANONYMOUS), controller.recommend);
 
+/**
+  * @swagger
+  * paths:
+  *   /review/discourage:
+  *     post:
+  *       tags:
+  *       - Review
+  *       summary: discourage the review
+  *       requestBody:
+  *         required: true
+  *         content:
+  *           application/json:
+  *             schema:
+  *               type: object
+  *               properties:
+  *                 reviewId:
+  *                   type: string
+  *                   description: unique id of review
+  *                   required: true
+  *                   example: 6234df9444b537fddcca769d
+  *       responses:
+  *         201:
+  *           description: Created
+  *           content:
+  *             application/json:
+  *               schema:
+  *                 type: object
+  *                 properties:
+  *                   message:
+  *                     type: string
+  *                     example: 'success'
+  */
 router.route('/discourage')
     .post(authorize(ANONYMOUS), controller.discourage);
 
