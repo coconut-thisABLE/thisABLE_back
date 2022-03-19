@@ -58,4 +58,11 @@ const {required} = require('joi');
 router.route('')
     .post(authorize(ANONYMOUS), controller.create);
 
+
+router.route('/recommend')
+    .post(authorize(ANONYMOUS), controller.recommend);
+
+router.route('/discourage')
+    .post(authorize(ANONYMOUS), controller.discourage);
+
 module.exports = router;

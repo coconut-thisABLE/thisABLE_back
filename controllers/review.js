@@ -25,3 +25,28 @@ exports.create = async (req, res, next) => {
     next(e);
   }
 };
+
+exports.recommend = async (req, res, next) => {
+  try {
+    const review = await Review.findById(req.body.reviewId).exec();
+    await review.updateOne({
+      good: review.good+1,
+    }).exec();
+    return res.status(httpStatus.CREATED).json({'message': 'success'});
+  } catch (e) {
+    console.log(e);
+    next(e);
+  }
+};
+
+exports.discourage = async (req, res, next) => {
+  try {
+    const review = await Review.findById(req.body.reviewId).exec();
+    await review.updateOne({
+      bad: review.bad+1,
+    }).exec();
+    return res.status(httpStatus.CREATED).json({'message': 'success'});
+  } catch (e) {
+    next(e);
+  }
+};
