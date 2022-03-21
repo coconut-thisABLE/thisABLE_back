@@ -42,3 +42,5 @@ exports.authorize = (roles = User.roles) =>
       'jwt', {session: false},
       handleJWT(req, res, next, roles),
   )(req, res, next);
+
+exports.oAuth = passport.authenticate('google', {session: false});

@@ -26,6 +26,9 @@ const userSchema = new mongoose.Schema(
         type: String,
         required: true,
       },
+      google: {
+        type: String,
+      },
       role: {
         type: String,
         required: true,
@@ -124,6 +127,25 @@ userSchema.statics = {
       });
     }
     return error;
+  },
+  async oAuthLogin({
+    id, email, type,
+  }) {
+    const user = await this.findOne({$or:
+      [
+        {google: id},
+        {email}]},
+    );
+    if (user) {
+      user.google = id;
+      if (!user.email) user.email = email;
+      if (!user.type) user.type = type;
+      return user.save();
+    }
+    const password = uuidv4();
+    return this.create({
+      google: id, email, password, type,
+    });
   },
 };
 

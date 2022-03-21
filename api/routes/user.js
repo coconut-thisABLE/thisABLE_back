@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const oAuthLogin = require('../middlewares/auth').oAuth;
 const controller = require('../../controllers/user');
 
 /**
@@ -147,4 +148,6 @@ router.route('/signup')
 router.route('/login')
     .post(controller.login);
 
+router.route('/google')
+    .post(oAuthLogin('google'), controller.oAuth);
 module.exports = router;

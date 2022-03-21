@@ -39,6 +39,7 @@ app.use(function(req, res, next) {
 // passport
 app.use(passport.initialize());
 passport.use('jwt', strategies.jwt);
+passport.use('google', strategies.google);
 
 // error handler
 // if error is not an instanceOf APIError, convert it.
