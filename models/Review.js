@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const httpStatus = require('http-status');
+const {omit} = require('lodash');
 const APIError = require('../errors/api-error');
 
 const reviewSchema = new mongoose.Schema(
@@ -45,20 +46,18 @@ const reviewSchema = new mongoose.Schema(
     },
 );
 
-reviewSchema.pre('save', async function save(next) {
-  try {
-    if (user == null) return next();
-    this.userType = user.type;
-    return next();
-  } catch (e) {
-    return next(e);
-  }
-});
-
 /**
  * statics
  */
 reviewSchema.statics = {
+  async register(review) {
+    if (review.user) {
+      review.userId = review.user._id;
+      review.userType = review.user.type;
+    }
+    review = omit(review, 'user');
+    return this.create(review);
+  },
   async get(id) {
     let review;
     if (mongoose.Types.ObjectId.isValid(id)) {
@@ -80,6 +79,9 @@ reviewSchema.statics = {
   async findListByUserId(userId) {
     return this.find({userId: userId}).exec();
   },
+  // async getStarRateAverage(locationId) {
+  //   return this.find({locationId: locationId}).
+  // }
 };
 
 module.exports = mongoose.model('Review', reviewSchema);

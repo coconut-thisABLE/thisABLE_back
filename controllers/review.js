@@ -16,8 +16,8 @@ exports.listByLocation = async (req, res, next) => {
 
 exports.create = async (req, res, next) => {
   try {
-    req.body.userId = req.user ? req.user._id : null;
-    await new Review(req.body).save();
+    req.body.user = req.user;
+    await Review.register(req.body);
     return res.status(httpStatus.CREATED).json({
       message: 'Create new review Success',
     });
