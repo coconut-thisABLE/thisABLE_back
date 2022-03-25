@@ -157,9 +157,7 @@ router.route('/:locationId/toilet')
  *                  type: string
  *                  example: get charger info success
  *                data:
- *                  type: array
- *                  items:
- *                    $ref: '#/components/schemas/Charger'
+ *                  $ref: '#/components/schemas/Charger'
  */
 router.route('/:locationId/charger')
     .get(controller.getChargerById);
@@ -193,5 +191,36 @@ router.route('/:locationId/charger')
  */
 router.route('/:locationId/review')
     .get(reviewController.listByLocation);
+
+/**
+ *  @swagger
+ *  paths:
+ *   /{location_ID}/review/average:
+ *    get:
+ *     tags:
+ *     - Maps
+ *     summary: review count and average
+ *     description: get count of review and average of review star rate
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 count:
+ *                   type: integer
+ *                   example: 5
+ *                   description: count of review
+ *                 average:
+ *                   type: float
+ *                   example: 4.5
+ *                   description: average of review star rate
+ */
+router.route('/:locationId/review/average')
+    .get(reviewController.getReviewNumberAndStarRateAverage);
 
 module.exports = router;

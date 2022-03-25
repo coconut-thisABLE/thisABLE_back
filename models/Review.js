@@ -79,9 +79,17 @@ reviewSchema.statics = {
   async findListByUserId(userId) {
     return this.find({userId: userId}).exec();
   },
-  // async getStarRateAverage(locationId) {
-  //   return this.find({locationId: locationId}).
-  // }
+  async getCountByLocationId(locationId) {
+    return this.find({locationId: locationId}).count();
+  },
+  async getAverageByLocationId(locationId) {
+    const starRateAverage = await this.aggregate()
+        .group({_id: '$locationId', avg_val: {$avg: '$star'}});
+
+    for (const avg of starRateAverage) {
+      if (avg._id==locationId) return avg.avg_val;
+    }
+  },
 };
 
 module.exports = mongoose.model('Review', reviewSchema);
