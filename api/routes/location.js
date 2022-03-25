@@ -194,4 +194,7 @@ router.route('/:locationId/charger')
 router.route('/:locationId/review')
     .get(reviewController.listByLocation);
 
+router.route('/:locationId/review/average')
+    .get(reviewController.getReviewNumberAndStarRateAverage);
+
 module.exports = router;

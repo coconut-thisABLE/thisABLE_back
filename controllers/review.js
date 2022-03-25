@@ -50,3 +50,18 @@ exports.discourage = async (req, res, next) => {
     next(e);
   }
 };
+
+exports.getReviewNumberAndStarRateAverage = async (req, res, next) => {
+  try {
+    const location = req.params.locationId;
+    const count = await Review.getCountByLocationId(location);
+    const average = await Review.getAverageByLocationId(location);
+
+    return res.status(httpStatus.OK).json({
+      count: count,
+      average: average,
+    });
+  } catch (e) {
+    next(e);
+  }
+};
