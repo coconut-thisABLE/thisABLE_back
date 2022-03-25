@@ -13,7 +13,7 @@ const chargerSchema = new mongoose.Schema(
 
 chargerSchema.statics = {
   async get(id) {
-    const charger = await this.find({locationId: id}).exec();
+    const charger = await this.findOne({locationId: id}).exec();
     if (charger) {
       return charger;
     }
