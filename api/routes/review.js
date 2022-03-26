@@ -28,6 +28,11 @@ const {required} = require('joi');
   *             schema:
   *               type: object
   *               properties:
+  *                 userType:
+  *                   type: string
+  *                   description: type of user
+  *                   enum: ['anonymous', 'abled', 'disabled']
+  *                   required: true
   *                 locationId:
   *                   type: integer
   *                   description: unique id of location
