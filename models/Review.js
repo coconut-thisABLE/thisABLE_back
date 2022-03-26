@@ -73,8 +73,38 @@ reviewSchema.statics = {
       isPublic: true,
     });
   },
-  async findListByLocationId(locationId) {
-    return this.find({locationId: locationId}).exec();
+  async findListByLocationId(locationId, sort) {
+    const sortCondition = {};
+    sortCondition[sort] = -1;
+    return this.aggregate([
+      {$match: {locationId: parseInt(locationId)}},
+      {$project: {
+        _id: 1,
+        locationId: 1,
+        userId: 1,
+        userType: 1,
+        detail: 1,
+        star: 1,
+        good: 1,
+        bad: 1,
+        createdAt: {
+          $dateToString: {
+            date: '$createdAt',
+            format: '%Y-%m-%d',
+            timezone: 'Asia/Seoul',
+          },
+        },
+      }},
+      {
+        $addFields: {
+          recommended: {
+            $subtract: ['$good', '$bad'],
+          },
+        },
+      },
+      {$sort: sortCondition},
+    ])
+        .exec();
   },
   async findListByUserId(userId) {
     return this.find({userId: userId}).exec();
@@ -84,11 +114,9 @@ reviewSchema.statics = {
   },
   async getAverageByLocationId(locationId) {
     const starRateAverage = await this.aggregate()
+        .match({locationId: parseInt(locationId)})
         .group({_id: '$locationId', avg_val: {$avg: '$star'}});
-
-    for (const avg of starRateAverage) {
-      if (avg._id==locationId) return avg.avg_val;
-    }
+    return starRateAverage[0].avg_val;
   },
 };
 
