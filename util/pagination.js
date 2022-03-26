@@ -2,7 +2,8 @@ const {base} = require('../config/vars');
 
 
 exports.paginate = ({sizeOfModel, sizePerPage, currentPageNumber, results}) => {
-  const total = parseInt(sizeOfModel/sizePerPage) + 1;
+  const total = Math.ceil(sizeOfModel/sizePerPage);
+
   const nextPageUrl =
     (currentPageNumber == total) ?
     null :

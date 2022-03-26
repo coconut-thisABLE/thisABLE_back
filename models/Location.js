@@ -171,8 +171,24 @@ locationSchema.statics = {
       {$limit: 3},
     ]);
   },
-  getSize() {
-    return this.count();
+  getSize({latitude, longitude}) {
+    return this.aggregate([
+      {
+        $geoNear: {
+          near: {
+            type: 'Point',
+            coordinates: [parseFloat(longitude), parseFloat(latitude)],
+          },
+          distanceField: 'distance',
+          distanceMultiplier: 0.001,
+          maxDistance: 2000,
+          spherical: true,
+        },
+      },
+      {
+        $count: 'count',
+      },
+    ]);
   },
 };
 
