@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const {object} = require('joi');
 const controller = require('../../controllers/location');
 const reviewController = require('../../controllers/review');
 
@@ -48,56 +49,73 @@ router.route('')
     .get(controller.list)
     .post(controller.create);
 
-
 /**
- *  @swagger
- *  paths:
- *   /search:
- *    get:
- *     tags:
- *     - Maps
- *     summary: location search list
- *     description: location list filtered by utility
- *     produces:
- *       - application/json
- *     parameters:
- *       - in: query
- *         name: page
- *         required: true
- *         schema:
- *           type: integer
- *           description: requested page number
- *       - in: query
- *         name: query
- *         required: true
- *         schema:
- *           type: string
- *           description: name of utility
- *           enum: ['toilet', 'charger', 'slope', 'elevator']
- *           example: toliet
- *       - in: query
- *         name: latitude
- *         required: true
- *         schema:
- *           type: number
- *           format: float
- *           example: 37.5366059
- *           description: latitude of current location
- *       - in: query
- *         name: longitude
- *         required: true
- *         schema:
- *           type: number
- *           format: float
- *           example: 126.9771397
- *           description: longitude of current location
- *     responses:
- *       200:
- *         description: OK
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/LocationList'
+ * @swagger
+ * paths:
+ *  /search:
+ *   get:
+ *    tags:
+ *    - Maps
+ *    summary: location list
+ *    description: location list (현재 위치 제외한 api 추후 수정 예정)
+ *    produces:
+ *      - application/json
+ *    parameters:
+ *      - in: query
+ *        name: page
+ *        required: true
+ *        schema:
+ *          type: integer
+ *          description: requested page number
+ *      - in: query
+ *        name: latitude
+ *        required: true
+ *        schema:
+ *          type: number
+ *          format: float
+ *          example: 37.5366059
+ *          description: latitude of current location
+ *      - in: query
+ *        name: longitude
+ *        required: true
+ *        schema:
+ *          type: number
+ *          format: float
+ *          example: 126.9771397
+ *          description: longitude of current location
+ *      - in: query
+ *        name: sort
+ *        required: true
+ *        schema:
+ *          type: string
+ *          enum: ['distance', 'review']
+ *          description: select sort condtion
+ *    responses:
+ *      200:
+ *        description: OK
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: array
+ *              items:
+ *                type: object
+ *                allOf:
+ *                  - $ref: '#/components/schemas/Location'
+ *                  - type: object
+ *                    properties:
+ *                      review:
+ *                        type: array
+ *                        items:
+ *                          type: object
+ *                          properties:
+ *                            _id:
+ *                              type: null
+ *                              example: never mind
+ *                            star_average:
+ *                              type: number
+ *                              format: float
+ *                              example: 4.6
+ *                              description: average of all of reviews of this location
  */
 router.route('/search')
     .get(controller.search);
