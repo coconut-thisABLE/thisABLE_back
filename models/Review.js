@@ -78,23 +78,6 @@ reviewSchema.statics = {
     sortCondition[sort] = -1;
     return this.aggregate([
       {$match: {locationId: parseInt(locationId)}},
-      {$project: {
-        _id: 1,
-        locationId: 1,
-        userId: 1,
-        userType: 1,
-        detail: 1,
-        star: 1,
-        good: 1,
-        bad: 1,
-        createdAt: {
-          $dateToString: {
-            date: '$createdAt',
-            format: '%Y-%m-%d',
-            timezone: 'Asia/Seoul',
-          },
-        },
-      }},
       {
         $addFields: {
           recommended: {
