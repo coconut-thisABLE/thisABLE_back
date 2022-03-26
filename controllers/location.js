@@ -46,52 +46,9 @@ exports.create = async (req, res, next) => {
   }
 };
 
-/**
- * @private
- * @param {string} query
- * @return {object} condtion
- */
-function getQueryFilterCondition(query) {
-  const FILTER_CONDITION_DICTIONARY = {
-    toilet: {isToiletExists: true},
-    charger: {isChargerExists: true},
-    elevator: {isElevatorExists: true},
-    slope: {isSlopeExists: true},
-  };
-  return FILTER_CONDITION_DICTIONARY[query];
-}
-
-/**
- * @private
- * @param {string} query
- * @return {Array} filteredLocations
- */
-async function search({query, page, latitude, longitude}) {
-  const filteredCondition = getQueryFilterCondition(query);
-  const data = await Location.searchList(
-      filteredCondition,
-      {
-        page: page,
-        perPage: DEFAULT_PAGE_SIZE,
-      },
-      {
-        latitude,
-        longitude,
-      },
-  );
-  const count = await Location.count(filteredCondition).exec();
-  return {data, count};
-}
-
 exports.search = async (req, res, next) => {
   try {
-    const searchResultData = await search(req.query);
-    const result = paginate({
-      sizeOfModel: searchResultData.count,
-      sizePerPage: DEFAULT_PAGE_SIZE,
-      currentPageNumber: req.query.page,
-      results: searchResultData.data,
-    });
+    const result = await Location.searchList(req.query);
     return res.status(httpStatus.OK).json(result);
   } catch (error) {
     next(error);

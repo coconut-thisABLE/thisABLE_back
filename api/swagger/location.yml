@@ -60,6 +60,12 @@ components:
             type: string,
             description: google maps place id of the location,
             example: ChIJN2x0fu2ifDUR51BupseGYmE
+          },
+          distance: {
+            type: number,
+            format: float,
+            description: distance between current location and this location,
+            example: 1.5
           }
         }
       }

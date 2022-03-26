@@ -68,23 +68,6 @@ const locationSchema = new mongoose.Schema(
     },
 );
 
-/**
- * 
- */
-const SORTING_BY_DISTACNE_CONDITION = (latitude, longitude) => {
-  return {
-    position: {
-      $nearSphere: {
-        $geometry: {
-          type: 'Point',
-          coordinates: [longitude, latitude],
-        },
-        $maxDistance: 2000,
-      },
-    },
-  }
-}
-
 locationSchema.statics = {
   async get(id) {
     const loc = await this.findById(id).exec();
@@ -97,20 +80,96 @@ locationSchema.statics = {
     });
   },
   list({page, perPage, latitude, longitude}) {
-    return this.find(SORTING_BY_DISTACNE_CONDITION(latitude, longitude))
-        .skip(perPage * (page - 1))
-        .limit(perPage)
-        .exec();
+    return this.aggregate([
+      {
+        $geoNear: {
+          near: {
+            type: 'Point',
+            coordinates: [parseFloat(longitude), parseFloat(latitude)],
+          },
+          distanceField: 'distance',
+          distanceMultiplier: 0.001,
+          maxDistance: 2000,
+          spherical: true,
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          address: 1,
+          locationType: 1,
+          latitude: 1,
+          longitude: 1,
+          isToiletExists: 1,
+          isChargerExists: 1,
+          isSlopeExists: 1,
+          isSlopeExists: 1,
+          distance: {
+            $substr: ['$distance', 0, 3],
+          },
+        },
+      },
+      {$sort: {'distance': 1}},
+      {$skip: perPage * (page-1)},
+      {$limit: perPage},
+    ]);
   },
-  searchList(query, {page, perPage}, {latitude, longitude}) {
-    return this.find({
-      ...SORTING_BY_DISTACNE_CONDITION(latitude, longitude),
-      ...query
-    })
-        .sort({_id: 1})
-        .skip(perPage * (page - 1))
-        .limit(perPage)
-        .exec();
+  searchList({type, sort, latitude, longitude}) {
+    const condition = {
+      'review': {'review': -1},
+      'distance': {'distance': 1},
+    };
+    const sortCondition = condition[sort];
+    return this.aggregate([
+      {
+        $geoNear: {
+          near: {
+            type: 'Point',
+            coordinates: [parseFloat(longitude), parseFloat(latitude)],
+          },
+          distanceField: 'distance',
+          distanceMultiplier: 0.001,
+          spherical: true,
+        },
+      },
+      {$match: {locationType: type}},
+      {
+        $lookup: {
+          from: 'reviews',
+          localField: '_id',
+          foreignField: 'locationId',
+          pipeline: [{
+            $group: {
+              _id: null,
+              star_average: {$avg: '$star'},
+            },
+          }],
+          as: 'review',
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          address: 1,
+          locationType: 1,
+          latitude: 1,
+          longitude: 1,
+          isToiletExists: 1,
+          isChargerExists: 1,
+          isSlopeExists: 1,
+          isSlopeExists: 1,
+          position: 1,
+          distance: {
+            $substr: ['$distance', 0, 3],
+          },
+          review: 1,
+        },
+      },
+      {$sort: sortCondition},
+      {$limit: 3},
+    ]);
   },
   getSize() {
     return this.count();
