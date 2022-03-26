@@ -74,7 +74,28 @@ reviewSchema.statics = {
     });
   },
   async findListByLocationId(locationId) {
-    return this.find({locationId: locationId}).exec();
+    return this.aggregate([
+      {$match: {locationId: parseInt(locationId)}},
+      {$project: {
+        _id: 1,
+        locationId: 1,
+        userId: 1,
+        userType: 1,
+        detail: 1,
+        star: 1,
+        good: 1,
+        bad: 1,
+        createdAt: {
+          $dateToString: {
+            date: '$createdAt',
+            format: '%Y-%m-%d',
+            timezone: 'Asia/Seoul',
+          },
+        },
+      }},
+      {$sort: {createdAt: -1}},
+    ])
+        .exec();
   },
   async findListByUserId(userId) {
     return this.find({userId: userId}).exec();
