@@ -105,11 +105,9 @@ reviewSchema.statics = {
   },
   async getAverageByLocationId(locationId) {
     const starRateAverage = await this.aggregate()
+        .match({locationId: parseInt(locationId)})
         .group({_id: '$locationId', avg_val: {$avg: '$star'}});
-
-    for (const avg of starRateAverage) {
-      if (avg._id==locationId) return avg.avg_val;
-    }
+    return starRateAverage[0].avg_val;
   },
 };
 
