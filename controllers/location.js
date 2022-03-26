@@ -9,9 +9,9 @@ exports.list = async (req, res, next) => {
     req.query.perPage = DEFAULT_PAGE_SIZE;
     const locations = await Location.list(req.query);
 
-    const sizeOfAllLocations = Object.keys(locations).length;
+    const sizeOfAllLocations = await Location.getSize(req.query);
     const result = paginate({
-      sizeOfModel: sizeOfAllLocations,
+      sizeOfModel: parseInt(sizeOfAllLocations[0].count),
       sizePerPage: DEFAULT_PAGE_SIZE,
       currentPageNumber: req.query.page,
       results: locations,
