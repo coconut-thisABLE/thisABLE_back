@@ -173,6 +173,14 @@ router.route('/:locationId/charger')
  *    description: get review list of the location
  *    produces:
  *      - application/json
+ *    parameters:
+ *      - in: query
+ *        name: sort
+ *        required: true
+ *        schema:
+ *          type: string
+ *          description: sorting condition
+ *          enum: ['recommended', 'createdAt']
  *    responses:
  *      200:
  *        description: OK
