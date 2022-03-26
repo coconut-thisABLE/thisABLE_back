@@ -105,6 +105,7 @@ dist
 .tern-port
 
 # Project configuration
-config/
+config/*
+!config/vars.js
 
 .DS_Store
