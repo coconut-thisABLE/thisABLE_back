@@ -73,7 +73,9 @@ reviewSchema.statics = {
       isPublic: true,
     });
   },
-  async findListByLocationId(locationId) {
+  async findListByLocationId(locationId, sort) {
+    const sortCondition = {};
+    sortCondition[sort] = -1;
     return this.aggregate([
       {$match: {locationId: parseInt(locationId)}},
       {$project: {
@@ -93,7 +95,14 @@ reviewSchema.statics = {
           },
         },
       }},
-      {$sort: {createdAt: -1}},
+      {
+        $addFields: {
+          recommended: {
+            $subtract: ['$good', '$bad'],
+          },
+        },
+      },
+      {$sort: sortCondition},
     ])
         .exec();
   },
