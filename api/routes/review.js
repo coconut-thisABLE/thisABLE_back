@@ -38,7 +38,7 @@ const {required} = require('joi');
   *                   description: detail review content
   *                   required: true
   *                   example: 'The Elevator in the building is very narrow'
-  *                 stare:
+  *                 star:
   *                   type: number
   *                   format: float
   *                   description: star rate of review
