@@ -1,5 +1,4 @@
 const router = require('express').Router();
-const {object} = require('joi');
 const controller = require('../../controllers/location');
 const reviewController = require('../../controllers/review');
 
@@ -119,6 +118,9 @@ router.route('')
  */
 router.route('/search')
     .get(controller.search);
+
+router.route('/route')
+    .get(controller.getFacilitiesWithin);
 
 /**
  * @swagger

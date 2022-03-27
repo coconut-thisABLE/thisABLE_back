@@ -1,6 +1,7 @@
 const httpStatus = require('http-status');
 const {Location, Toilet, Charger} = require('../models');
 const {paginate} = require('../util/pagination');
+const midpoint = require('@turf/midpoint');
 
 const DEFAULT_PAGE_SIZE = 10;
 
@@ -75,6 +76,27 @@ exports.getChargerById = async (req, res, next) => {
       'data': charger,
     });
   } catch (error) {
+    next(error);
+  }
+};
+
+exports.getFacilitiesWithin = async (req, res, next) => {
+  try {
+    const dist = await Location.getDistanceWithCurrentLocation(req.query);
+
+    const locationCoordinate = [dist[0].longitude, dist[0].latitude];
+    const currentCoordinate = [req.query.longitude, req.query.latitude];
+    const midPosition = midpoint(locationCoordinate, currentCoordinate);
+    console.log('midPosition :', midPosition);
+
+    const facilitesList = await Location.facilitiesListWithinRoute({
+      longitude: midPosition.geometry.coordinates[0],
+      latitude: midPosition.geometry.coordinates[1],
+      maxDistance: dist[0].distance*1000/2,
+    });
+    return res.status(httpStatus.OK).json(facilitesList);
+  } catch (error) {
+    console.log(error);
     next(error);
   }
 };
