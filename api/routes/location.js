@@ -119,6 +119,52 @@ router.route('')
 router.route('/search')
     .get(controller.search);
 
+/**
+ * @swagger
+ * paths:
+ *  /route:
+ *   get:
+ *    tags:
+ *    - Maps
+ *    summary: facilites list
+ *    description: 현재 위치에서 장소까지의 가는 길 경로 내에 있는 이용시설 목록, 가까운 위치부터 나열
+ *    produces:
+ *      - application/json
+ *    parameters:
+ *      - in: query
+ *        name: locationId
+ *        required: true
+ *        schema:
+ *          type: integer
+ *          description: unique id of location where to go
+ *      - in: query
+ *        name: latitude
+ *        required: true
+ *        schema:
+ *          type: number
+ *          format: float
+ *          example: 37.5366059
+ *          description: latitude of current location
+ *      - in: query
+ *        name: longitude
+ *        required: true
+ *        schema:
+ *          type: number
+ *          format: float
+ *          example: 126.9771397
+ *          description: longitude of current location
+ *    responses:
+ *      200:
+ *        description: OK
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: array
+ *              items:
+ *                type: object
+ *                allOf:
+ *                  - $ref: '#/components/schemas/Location'
+ */
 router.route('/route')
     .get(controller.getFacilitiesWithin);
 
