@@ -190,6 +190,46 @@ locationSchema.statics = {
       },
     ]);
   },
+  facilitiesListWithinRoute({latitude, longitude, maxDistance=2000}) {
+    return this.find(
+        {
+          position: {
+            $nearSphere: {
+              $geometry: {
+                type: 'Point',
+                coordinates: [longitude, latitude],
+              },
+              $maxDistance: maxDistance,
+            },
+          },
+          isElevatorExists: true,
+          isSlopeExists: true,
+        },
+    );
+  },
+  getDistanceWithCurrentLocation({locationId, latitude, longitude}) {
+    return this.aggregate([
+      {
+        $geoNear: {
+          near: {
+            type: 'Point',
+            coordinates: [parseFloat(longitude), parseFloat(latitude)],
+          },
+          distanceField: 'distance',
+          distanceMultiplier: 0.001,
+          spherical: true,
+        },
+      },
+      {$match: {_id: parseInt(locationId)}},
+      {
+        $project: {
+          latitude: 1,
+          longitude: 1,
+          distance: 1,
+        },
+      },
+    ]);
+  },
 };
 
 locationSchema.plugin(autoIncrement.plugin, {
