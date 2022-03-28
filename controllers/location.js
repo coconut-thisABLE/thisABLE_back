@@ -8,15 +8,21 @@ const DEFAULT_PAGE_SIZE = 10;
 exports.list = async (req, res, next) => {
   try {
     req.query.perPage = DEFAULT_PAGE_SIZE;
-    const locations = await Location.list(req.query);
+    let result;
+    if (req.query.page === 'all') {
+      result = {};
+      result.results = await Location.allList(req.query);
+    } else {
+      const locations = await Location.list(req.query);
+      const sizeOfAllLocations = await Location.getSize(req.query);
+      result = paginate({
+        sizeOfModel: parseInt(sizeOfAllLocations[0].count),
+        sizePerPage: DEFAULT_PAGE_SIZE,
+        currentPageNumber: req.query.page,
+        results: locations,
+      });
+    }
 
-    const sizeOfAllLocations = await Location.getSize(req.query);
-    const result = paginate({
-      sizeOfModel: parseInt(sizeOfAllLocations[0].count),
-      sizePerPage: DEFAULT_PAGE_SIZE,
-      currentPageNumber: req.query.page,
-      results: locations,
-    });
     return res.status(httpStatus.OK).json(result);
   } catch (error) {
     next(error);
