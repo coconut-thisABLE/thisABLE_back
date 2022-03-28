@@ -25,5 +25,6 @@ module.exports = {
   dialogFlowSessionLanguageCode: process.env.DIALOGFLOW_LANGUAGE_CODE,
   googleClientEmail: process.env.GOOGLE_CLIENT_EMAIL,
   googlePrivateKey: process.env.GOOGLE_PRIVATE_KEY,
+  chatbotCredentialPath: process.env.GOOGLE_CHATBOT_CREDENTIAL_PATH,
   mongoURI: process.env.MONGO_URI,
 };
