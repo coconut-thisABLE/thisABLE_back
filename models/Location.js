@@ -5,6 +5,8 @@ const APIError = require('../errors/api-error');
 
 autoIncrement.initialize(mongoose.connection);
 
+const MAX_DISTANCE = 2000;
+
 const locationSchema = new mongoose.Schema(
     {
       _id: {
@@ -89,7 +91,7 @@ locationSchema.statics = {
           },
           distanceField: 'distance',
           distanceMultiplier: 0.001,
-          maxDistance: 2000,
+          maxDistance: MAX_DISTANCE,
           spherical: true,
         },
       },
@@ -113,6 +115,23 @@ locationSchema.statics = {
       {$sort: {'distance': 1}},
       {$skip: perPage * (page-1)},
       {$limit: perPage},
+    ]);
+  },
+  allList({latitude, longitude}) {
+    return this.aggregate([
+      {
+        $geoNear: {
+          near: {
+            type: 'Point',
+            coordinates: [parseFloat(longitude), parseFloat(latitude)],
+          },
+          distanceField: 'distance',
+          distanceMultiplier: 0.001,
+          maxDistance: MAX_DISTANCE,
+          spherical: true,
+        },
+      },
+      {$sort: {'distance': 1}},
     ]);
   },
   searchList({type, sort, latitude, longitude}) {
