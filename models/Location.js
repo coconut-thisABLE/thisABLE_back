@@ -5,8 +5,6 @@ const APIError = require('../errors/api-error');
 
 autoIncrement.initialize(mongoose.connection);
 
-const MAX_DISTANCE = 2000;
-
 const locationSchema = new mongoose.Schema(
     {
       _id: {
@@ -70,6 +68,29 @@ const locationSchema = new mongoose.Schema(
     },
 );
 
+/**
+ * @private
+ */
+
+const MAX_DISTANCE = 2000;
+const LOCATION_TRANSFORMED = {
+  $project: {
+    _id: 1,
+    name: 1,
+    address: 1,
+    locationType: 1,
+    latitude: 1,
+    longitude: 1,
+    isToiletExists: 1,
+    isChargerExists: 1,
+    isSlopeExists: 1,
+    isSlopeExists: 1,
+    distance: {
+      $substr: ['$distance', 0, 3],
+    },
+  },
+};
+
 locationSchema.statics = {
   async get(id) {
     const loc = await this.findById(id).exec();
@@ -95,23 +116,7 @@ locationSchema.statics = {
           spherical: true,
         },
       },
-      {
-        $project: {
-          _id: 1,
-          name: 1,
-          address: 1,
-          locationType: 1,
-          latitude: 1,
-          longitude: 1,
-          isToiletExists: 1,
-          isChargerExists: 1,
-          isSlopeExists: 1,
-          isSlopeExists: 1,
-          distance: {
-            $substr: ['$distance', 0, 3],
-          },
-        },
-      },
+      LOCATION_TRANSFORMED,
       {$sort: {'distance': 1}},
       {$skip: perPage * (page-1)},
       {$limit: perPage},
@@ -131,6 +136,7 @@ locationSchema.statics = {
           spherical: true,
         },
       },
+      LOCATION_TRANSFORMED,
       {$sort: {'distance': 1}},
     ]);
   },
@@ -167,25 +173,7 @@ locationSchema.statics = {
           as: 'review',
         },
       },
-      {
-        $project: {
-          _id: 1,
-          name: 1,
-          address: 1,
-          locationType: 1,
-          latitude: 1,
-          longitude: 1,
-          isToiletExists: 1,
-          isChargerExists: 1,
-          isSlopeExists: 1,
-          isSlopeExists: 1,
-          position: 1,
-          distance: {
-            $substr: ['$distance', 0, 3],
-          },
-          review: 1,
-        },
-      },
+      LOCATION_TRANSFORMED,
       {$sort: sortCondition},
       {$limit: 3},
     ]);
