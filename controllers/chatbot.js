@@ -10,7 +10,7 @@ const {
 const sessionClient = new dialogflow.SessionsClient();
 const sessionPath = sessionClient.sessionPath(projectId, sessionId);
 
-exports.createTextQuery = async (req, res) => {
+exports.createTextQuery = async (req, res, next) => {
   try {
     // We need to send some information that comes from the client to Dialogflow API
   // The text query request.
@@ -40,7 +40,7 @@ exports.createTextQuery = async (req, res) => {
   }
 };
 
-exports.createEventQuery = async (req, res) => {
+exports.createEventQuery = async (req, res, next) => {
   try {
     // We need to send some information that comes from the client to Dialogflow API
   // The text query request.
