@@ -4,10 +4,11 @@ const {
   googleProjectID: projectId,
   dialogFlowSessionID: sessionId,
   dialogFlowSessionLanguageCode: languageCode,
+  chatbotCredentialPath: keyPath,
 } = require('../config/vars');
 
 // Create a new session
-const sessionClient = new dialogflow.SessionsClient();
+const sessionClient = new dialogflow.SessionsClient({keyFilename: keyPath});
 const sessionPath = sessionClient.sessionPath(projectId, sessionId);
 
 exports.createTextQuery = async (req, res, next) => {
