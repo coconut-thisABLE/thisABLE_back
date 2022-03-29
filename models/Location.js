@@ -84,7 +84,7 @@ const LOCATION_TRANSFORMED = {
     isToiletExists: 1,
     isChargerExists: 1,
     isSlopeExists: 1,
-    isSlopeExists: 1,
+    isElevatorExists: 1,
     distance: {
       $substr: ['$distance', 0, 3],
     },
