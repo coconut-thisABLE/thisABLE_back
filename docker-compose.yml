@@ -1,18 +1,23 @@
-version: '2.4'
-
+version: '3'
 services:
-  app:
+  node:
+    restart: always
     build: .
-    environment:
-      - NODE_ENV=test
-      - MONGO_URI=mongodb://mongodb:27017/thisable-test
-    volumes:
-      - .:/app
     ports:
-      - "3000:80"
+      - 80:3000
+    volumes:
+      - ./:/code
+    links:
+      - mongodb
     depends_on:
       - mongodb
   mongodb:
-      image: mongo
-      ports:
-        - '27017:27017'
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb:/data/db
+volumes:
+ mongodb:
+
