@@ -1,12 +1,12 @@
+
 {
-    "AWSEBDockerrunVersion": "2",
-    "Image": {
-      "Name": "thisable-test",
-      "Update": "true"
-    },
-    "Ports": [
-      {
-        "ContainerPort": "80"
-      }
-    ]
+  "AWSEBDockerrunVersion": "1",
+  "Image": {
+    "Name": "shunnyjang/thisable-v1-eb"
+  },
+  "Ports": [
+    {
+      "ContainerPort": "3000"
+    }
+  ]
 }

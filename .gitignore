@@ -109,3 +109,5 @@ config/*
 !config/vars.js
 
 .DS_Store
+
+.elasticbeanstalk/
